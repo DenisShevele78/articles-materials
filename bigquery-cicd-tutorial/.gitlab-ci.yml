@@ -1,0 +1,16 @@
+stages: # Название этапа (можно любое)
+  - validate
+  
+image: python:3.11 # Docker-образ с Python
+
+variables:
+  BQ_CRED: $BQ_KEY_test # Берём ключ из GitLab Variables
+
+validate: # сценарий этапа валидации SQL
+  stage: validate
+  script:
+    - pip install google-cloud-bigquery python-gitlab  # Установка библиотек
+    - python gitlab_cicd/cicd_validate.py # Запуск нашего скрипта
+  only: # триггер запуска скрипта
+    refs: # только для ветки main
+      - main
